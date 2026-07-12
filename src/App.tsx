@@ -342,6 +342,8 @@ const QUIZ_QUESTIONS = [
     y: 65, 
     options: ['IN', 'OUT (Short)', 'OUT (Long)', 'OUT (Wide)', 'OUT (Wrong Court)'],
     answer: 'OUT (Short)',
+    situationKo: '단식 서브 상황에서 점수가 0점일 때, 서브를 넣은 셔틀콕이 대각선 방향으로 날아갔으나 상대방 숏 서비스 라인에 미치지 못하고 네트 바로 앞에 떨어졌습니다. 올바른 판정은 무엇일까요?',
+    situationEn: 'In a singles serve with score 0, the served shuttlecock traveled diagonally but fell short of the receiver\'s short service line, landing close to the net. What is the correct call?',
     explainKo: '점수가 0(짝수)이므로 오른쪽에서 서브를 넣어 대각선인 상대 왼쪽 코트로 보냈으나, 숏 서비스 라인(Y=90.2)보다 네트에 가깝게(Y=65) 떨어졌으므로 숏 서비스 폴트입니다.',
     explainEn: 'With score 0 (even), serving diagonally to the receiver\'s left court. However, it landed too close to the net (Y=65), failing to cross the short service line (Y=90.2).'
   },
@@ -353,6 +355,8 @@ const QUIZ_QUESTIONS = [
     y: 48, 
     options: ['IN', 'OUT (Short)', 'OUT (Long)', 'OUT (Wide)', 'OUT (Wrong Court)'],
     answer: 'OUT (Long)',
+    situationKo: '복식 서브 상황에서 점수가 3점일 때, 대각선 코트로 길게 날아간 셔틀콕이 백 바운더리 라인(맨 끝선) 바로 안쪽이지만, 복식 롱 서비스 라인(끝에서 두 번째 선)을 넘어 뒤쪽 구석에 떨어졌습니다. 올바른 판정은 무엇일까요?',
+    situationEn: 'In a doubles serve with score 3, the shuttlecock flew deep diagonally, landing inside the back boundary line but crossing behind the doubles long service line. What is the correct call?',
     explainKo: '복식 경기에서 홀수 점수(3점) 서브는 대각선 상대 우측 코트(X > 50)로 유효하나, 복식 롱 서비스 라인(Y=50.6)보다 뒤쪽(Y=48)에 떨어졌으므로 아웃(Long)입니다.',
     explainEn: 'In doubles with score 3 (odd), the diagonal target is receiver\'s right (X > 50). However, the doubles serve must land in front of the doubles long service line (Y=50.6). Landed at Y=48, so it is OUT (Long).'
   },
@@ -364,6 +368,8 @@ const QUIZ_QUESTIONS = [
     y: 46, 
     options: ['IN', 'OUT (Short)', 'OUT (Long)', 'OUT (Wide)', 'OUT (Wrong Court)'],
     answer: 'OUT (Wide)',
+    situationKo: '단식 서브 상황에서 점수가 2점일 때, 대각선 방향 깊숙이 들어간 셔틀콕이 세로 길이는 유효하나, 단식 사이드라인(안쪽 세로선)을 벗어나 복식 사이드라인 쪽에 떨어졌습니다. 올바른 판정은 무엇일까요?',
+    situationEn: 'In a singles serve with score 2, the shuttlecock landed deep diagonally but fell outside the singles sideline (inner sideline), near the doubles sideline. What is the correct call?',
     explainKo: '단식 서브가 대각선(X < 50) 및 깊이(Y=46)는 통과했으나, 단식 사이드라인 경계선(X=24.1)보다 바깥인 X=22에 떨어졌으므로 아웃(Wide)입니다.',
     explainEn: 'Singles serve landed diagonally (X < 50) and deep enough (Y=46), but it landed outside the singles sideline (X=24.1) at X=22, so it is OUT (Wide).'
   },
@@ -375,6 +381,8 @@ const QUIZ_QUESTIONS = [
     y: 60, 
     options: ['IN', 'OUT (Short)', 'OUT (Long)', 'OUT (Wide)', 'OUT (Wrong Court)'],
     answer: 'IN',
+    situationKo: '복식 서브 상황에서 점수가 4점일 때, 대각선 방향으로 낮고 넓게 들어간 서브가 단식 사이드라인(안쪽선)을 넘고 복식 사이드라인(바깥선) 안쪽에 걸치며, 숏 라인과 복식 롱 라인 사이에 정상적으로 떨어졌습니다. 올바른 판정은 무엇일까요?',
+    situationEn: 'In a doubles serve with score 4, the served shuttlecock went low and wide diagonally, landing between the singles and doubles sidelines, and between the short and doubles long service lines. What is the correct call?',
     explainKo: '복식 서브가 짝수 점수(4)에 맞추어 대각선 좌측 코트로 향했고, 복식 가로 범위(X=19.5~50) 및 세로 범위(Y=50.6~90.2) 내부에 안전하게 낙하했으므로 정답은 IN입니다.',
     explainEn: 'Doubles serve with score 4 (even) directed diagonally left, landing safely inside the doubles sideline (X=19.5) and between the serve lines (Y=60), so it is IN.'
   },
@@ -386,6 +394,8 @@ const QUIZ_QUESTIONS = [
     y: 50,
     options: ['IN', 'OUT (Short)', 'OUT (Long)', 'OUT (Wide)', 'OUT (Wrong Court)'],
     answer: 'OUT (Wrong Court)',
+    situationKo: '단식 서브 상황에서 점수가 1점일 때, 대각선이 아닌 서버 바로 맞은편(직선 방향) 코트의 유효 깊이 안쪽에 셔틀콕이 떨어졌습니다. 올바른 판정은 무엇일까요?',
+    situationEn: 'In a singles serve with score 1, the served shuttlecock landed inside the boundary but on the straight-ahead court rather than the diagonally opposite court. What is the correct call?',
     explainKo: '홀수 점수(1점)에서는 대각선 오른쪽 코트(X > 50)로 서브를 넣어야 하지만, 서버 바로 맞은편인 왼쪽 코트(X=42)에 셔틀콕이 떨어졌으므로 서비스 구역 위반 폴트입니다.',
     explainEn: 'With an odd score (1), the server must serve to the diagonal right court (X > 50). Since it landed on the left side (X=42), it is OUT (Wrong Court).'
   }
@@ -1269,8 +1279,8 @@ export default function App() {
                   </div>
                   <p className="text-xs text-slate-300 leading-normal">
                     {lang === 'ko' 
-                      ? `${QUIZ_QUESTIONS[currentQuizIndex].type === 'singles' ? '단식' : '복식'} 서브 상황에서 점수가 ${QUIZ_QUESTIONS[currentQuizIndex].score}점일 때, 셔틀콕이 상대 코트 (X: ${QUIZ_QUESTIONS[currentQuizIndex].x}, Y: ${QUIZ_QUESTIONS[currentQuizIndex].y}) 위치에 떨어졌습니다. 올바른 판정은 무엇일까요?`
-                      : `In ${QUIZ_QUESTIONS[currentQuizIndex].type} serve with server score ${QUIZ_QUESTIONS[currentQuizIndex].score}, the shuttlecock landed at (X: ${QUIZ_QUESTIONS[currentQuizIndex].x}, Y: ${QUIZ_QUESTIONS[currentQuizIndex].y}) in the receiver's court. What is the correct call?`
+                      ? QUIZ_QUESTIONS[currentQuizIndex].situationKo
+                      : QUIZ_QUESTIONS[currentQuizIndex].situationEn
                     }
                   </p>
                 </div>
