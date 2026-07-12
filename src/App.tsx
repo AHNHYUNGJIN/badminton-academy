@@ -128,6 +128,10 @@ const TRANSLATIONS = {
         {
           title: '서브권의 이동 (사이드 아웃)',
           content: '리시브 팀이 랠리에서 이기면 1점을 획득하고 새로운 서브권을 가져옵니다. 이때 리시버는 자리를 바꾸지 않고, 현재 자신의 점수(짝/홀)에 맞는 위치에 있는 선수가 서브를 넣습니다.'
+        },
+        {
+          title: '인터벌 및 코트 교대 규칙',
+          content: '게임 중 한쪽이 11점에 도달하면 60초 이내의 휴식(인터벌)이 주어집니다. 각 게임 종료 후에는 2분의 인터벌이 주어지며, 파이널 3게임에서는 한쪽이 11점에 도달했을 때 코트를 맞바꿉니다.'
         }
       ]
     },
@@ -145,11 +149,19 @@ const TRANSLATIONS = {
         },
         {
           name: '3. 올바른 서브 자세',
-          content: '서버와 리시버는 대각선 방향의 서비스 코트 안쪽에 양발을 대고 서 있어야 합니다. 라켓으로 셔틀콕을 치는 순간 셔틀콕 전체가 서버의 허리(가장 아래쪽 갈비뼈 기준 또는 현재 규정상 바닥으로부터 1.15m 이하)보다 아래에 있어야 합니다.'
+          content: '서버와 리시버는 대각선 방향의 서비스 코트 안쪽에 양발을 대고 서 있어야 합니다. 라켓으로 셔틀콕을 치는 순간 셔틀콕 전체가 바닥으로부터 1.15m 이하에 있어야 하며, 라켓의 연속 전방 움직임이 지체(이중 동작 폴트)되어서는 안 됩니다.'
         },
         {
           name: '4. Let (재경기)',
           content: '예상치 못한 방해나 사고가 일어났을 때 선언됩니다. 레트가 선언되면 이전 서브 이후의 플레이는 무효가 되며, 서브를 넣었던 선수가 다시 서브를 넣습니다.'
+        },
+        {
+          name: '5. 네트 터치 및 오버넷',
+          content: '인플레이 상태에서 선수나 선수의 라켓이 네트에 닿으면 네트 터치 폴트입니다. 또한 셔틀콕이 네트를 넘어오기 전에 상대 진영에서 타구하면 오버넷 폴트입니다. (스윙 후 라켓이 넘어가는 것은 허용)'
+        },
+        {
+          name: '6. 서브 시 네트 접촉',
+          content: '배드민턴에서는 서브한 셔틀콕이 네트 상단을 스치고 가더라도 올바른 대각선 서비스 코트 내부에 들어가면 레트가 아닌 정상적인 유효 서브(IN)로 경기 진행됩니다.'
         }
       ]
     },
@@ -290,6 +302,10 @@ const TRANSLATIONS = {
         {
           title: 'Side-out (Service Transition)',
           content: 'If the receiving side wins a rally, they score a point and become the new serving side. Players do not swap positions; the player at the court corresponding to their score (even/odd) serves.'
+        },
+        {
+          title: 'Intervals & Changing Ends',
+          content: 'A 60-second interval is allowed when a side reaches 11 points in a game. A 2-minute interval is allowed between games. In the 3rd game, players change ends when a side reaches 11 points.'
         }
       ]
     },
@@ -307,11 +323,19 @@ const TRANSLATIONS = {
         },
         {
           name: '3. Correct Service execution',
-          content: 'Both server and receiver must stand within diagonally opposite service courts without touching the boundary lines. At the impact, the whole shuttle must be below 1.15m from the court surface.'
+          content: 'Both server and receiver must stand within diagonally opposite service courts. At the impact, the whole shuttle must be below 1.15m from the court surface and the racket must move continuously forward.'
         },
         {
           name: '4. Let (Replay)',
           content: 'Called during unforeseen disruptions. If a let is called, play since the last service shall not count and the player who served shall serve again.'
+        },
+        {
+          name: '5. Net Touch & Overnet',
+          content: 'Touching the net with the body or racket during a rally is a fault. Hitting the shuttle before it crosses to your side is also a fault (though follow-through over the net is allowed).'
+        },
+        {
+          name: '6. Net Contact on Serve',
+          content: 'If a served shuttlecock clips the top of the net and lands in the correct diagonal service court, it is counted as a valid serve (IN) rather than a let.'
         }
       ]
     },
