@@ -148,7 +148,7 @@ const TRANSLATIONS = {
           content: '서버와 리시버는 대각선 방향의 서비스 코트 안쪽에 양발을 대고 서 있어야 합니다. 라켓으로 셔틀콕을 치는 순간 셔틀콕 전체가 서버의 허리(가장 아래쪽 갈비뼈 기준 또는 현재 규정상 바닥으로부터 1.15m 이하)보다 아래에 있어야 합니다.'
         },
         {
-          name: '4. 레트 (Let - 재경기)',
+          name: '4. Let (재경기)',
           content: '예상치 못한 방해나 사고가 일어났을 때 선언됩니다. 레트가 선언되면 이전 서브 이후의 플레이는 무효가 되며, 서브를 넣었던 선수가 다시 서브를 넣습니다.'
         }
       ]
@@ -337,9 +337,9 @@ const QUIZ_QUESTIONS = [
   {
     id: 1,
     type: 'singles',
-    score: 0, // 짝수 -> 서버 우측(오른쪽) 위치 -> 타겟은 상대 좌측 (X < 50)
-    x: 35, // 가로 좌측
-    y: 65, // Y = 65 (숏라인 90.2보다 아래이므로 네트쪽 -> OUT Short)
+    score: 0, 
+    x: 35, 
+    y: 65, 
     options: ['IN', 'OUT (Short)', 'OUT (Long)', 'OUT (Wide)', 'OUT (Wrong Court)'],
     answer: 'OUT (Short)',
     explainKo: '점수가 0(짝수)이므로 오른쪽에서 서브를 넣어 대각선인 상대 왼쪽 코트로 보냈으나, 숏 서비스 라인(Y=90.2)보다 네트에 가깝게(Y=65) 떨어졌으므로 숏 서비스 폴트입니다.',
@@ -348,9 +348,9 @@ const QUIZ_QUESTIONS = [
   {
     id: 2,
     type: 'doubles',
-    score: 3, // 홀수 -> 서버 좌측(왼쪽) 위치 -> 타겟은 상대 우측 (X > 50)
-    x: 78, // 가로 우측 (복식 사이드라인 80.5 안쪽, 단식 사이드라인 75.9 바깥)
-    y: 48, // 복식 롱 서비스 라인(Y=50.6)보다 뒤쪽(Y=48) -> OUT Long
+    score: 3, 
+    x: 78, 
+    y: 48, 
     options: ['IN', 'OUT (Short)', 'OUT (Long)', 'OUT (Wide)', 'OUT (Wrong Court)'],
     answer: 'OUT (Long)',
     explainKo: '복식 경기에서 홀수 점수(3점) 서브는 대각선 상대 우측 코트(X > 50)로 유효하나, 복식 롱 서비스 라인(Y=50.6)보다 뒤쪽(Y=48)에 떨어졌으므로 아웃(Long)입니다.',
@@ -359,9 +359,9 @@ const QUIZ_QUESTIONS = [
   {
     id: 3,
     type: 'singles',
-    score: 2, // 짝수 -> 우측에서 서브 -> 타겟 상대 좌측 (X < 50)
-    x: 22, // 단식 사이드라인(X=24.1) 바깥쪽 -> OUT Wide
-    y: 46, // 백 boundary(Y=43) 안쪽
+    score: 2, 
+    x: 22, 
+    y: 46, 
     options: ['IN', 'OUT (Short)', 'OUT (Long)', 'OUT (Wide)', 'OUT (Wrong Court)'],
     answer: 'OUT (Wide)',
     explainKo: '단식 서브가 대각선(X < 50) 및 깊이(Y=46)는 통과했으나, 단식 사이드라인 경계선(X=24.1)보다 바깥인 X=22에 떨어졌으므로 아웃(Wide)입니다.',
@@ -370,9 +370,9 @@ const QUIZ_QUESTIONS = [
   {
     id: 4,
     type: 'doubles',
-    score: 4, // 짝수 -> 우측에서 서브 -> 타겟 상대 좌측 (X < 50)
-    x: 22, // 복식 사이드라인(X=19.5) 안쪽, 단식 사이드라인(X=24.1) 바깥쪽 -> 복식에선 IN!
-    y: 60, // 복식 롱라인(50.6)과 숏라인(90.2) 사이
+    score: 4, 
+    x: 22, 
+    y: 60, 
     options: ['IN', 'OUT (Short)', 'OUT (Long)', 'OUT (Wide)', 'OUT (Wrong Court)'],
     answer: 'IN',
     explainKo: '복식 서브가 짝수 점수(4)에 맞추어 대각선 좌측 코트로 향했고, 복식 가로 범위(X=19.5~50) 및 세로 범위(Y=50.6~90.2) 내부에 안전하게 낙하했으므로 정답은 IN입니다.',
@@ -381,8 +381,8 @@ const QUIZ_QUESTIONS = [
   {
     id: 5,
     type: 'singles',
-    score: 1, // 홀수 -> 좌측에서 서브 -> 타겟 상대 우측 (X > 50)
-    x: 42, // 대각선이 아닌 서버 본인 방향 코트 (X < 50) -> OUT Wrong Court
+    score: 1, 
+    x: 42, 
     y: 50,
     options: ['IN', 'OUT (Short)', 'OUT (Long)', 'OUT (Wide)', 'OUT (Wrong Court)'],
     answer: 'OUT (Wrong Court)',
@@ -403,6 +403,12 @@ export default function App() {
   const [serveResult, setServeResult] = useState<string | null>(null);
   const [mousePos, setMousePos] = useState<{ x: number; y: number } | null>(null);
 
+  // 애니메이션용 상태
+  const [isAnimating, setIsAnimating] = useState<boolean>(false);
+  const [animProgress, setAnimProgress] = useState<number>(0);
+  const [startPos, setStartPos] = useState<{ x: number; y: number }>({ x: 65, y: 153.4 });
+  const [targetPos, setTargetPos] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
+
   // 코트 가이드 호버 상태
   const [hoveredLine, setHoveredLine] = useState<string | null>(null);
 
@@ -417,53 +423,35 @@ export default function App() {
 
   // 배드민턴 서브 판정 엔진 (BWF 규격 스케일 기준)
   // X: 0 ~ 100, Y: 0 ~ 220 (네트는 Y = 110)
-  // 숏 서비스 라인: Y=90.2 (위쪽)
-  // 복식 롱 서비스 라인: Y=50.6 (위쪽)
-  // 백 바운더리 라인: Y=43 (위쪽)
-  // 복식 사이드라인: X = 19.5 ~ 80.5
-  // 단식 사이드라인: X = 24.1 ~ 75.9
-  // 센터라인: X = 50
   const evaluateServe = (x: number, y: number, mode: 'singles' | 'doubles', score: number): string => {
     const isEven = score % 2 === 0;
     
-    // 1. 네트(Y=110) 아랫쪽 코트는 서브 낙하 불가
     if (y >= 110) {
       return t.serve.outShort;
     }
-
-    // 2. 숏 서비스 라인보다 네트 쪽에 떨어진 경우 (Y > 90.2)
     if (y > 90.2) {
       return t.serve.outShort;
     }
-
-    // 3. 백 바운더리 라인(Y < 43)보다 뒤로 나간 경우
     if (y < 43) {
       return t.serve.outLong;
     }
-
-    // 4. 복식일 때 복식 롱 서비스 라인(Y < 50.6)을 넘어간 경우
     if (mode === 'doubles' && y < 50.6) {
       return t.serve.outLong;
     }
 
-    // 5. 짝수 점수일 때: 오른쪽에서 서브 -> 대각선 왼쪽 코트(X < 50)가 타겟
     if (isEven) {
       if (x > 50) {
         return t.serve.outWrong;
       }
-      // 사이드라인 체크
       if (mode === 'singles') {
         if (x < 24.1) return t.serve.outWide;
       } else {
         if (x < 19.5) return t.serve.outWide;
       }
-    } 
-    // 6. 홀수 점수일 때: 왼쪽에서 서브 -> 대각선 오른쪽 코트(X > 50)가 타겟
-    else {
+    } else {
       if (x < 50) {
         return t.serve.outWrong;
       }
-      // 사이드라인 체크
       if (mode === 'singles') {
         if (x > 75.9) return t.serve.outWide;
       } else {
@@ -475,16 +463,50 @@ export default function App() {
   };
 
   const handleCourtClick = (e: React.MouseEvent<SVGSVGElement>) => {
+    if (isAnimating) return; // 이미 비행 중이면 무시
+
     const rect = e.currentTarget.getBoundingClientRect();
     const clickX = ((e.clientX - rect.left) / rect.width) * 100;
-    const clickY = ((e.clientY - rect.top) / rect.height) * 220; // Y축은 0~220 스케일
+    const clickY = ((e.clientY - rect.top) / rect.height) * 220;
 
-    setShuttlePos({ x: clickX, y: clickY });
-    const result = evaluateServe(clickX, clickY, serveMode, serverScore);
-    setServeResult(result);
+    // 네트 아래쪽이나 코트 바깥 탭 제한
+    if (clickY >= 110 || clickY < 10 || clickX < 5 || clickX > 95) return;
+
+    // 출발 위치 설정 (서버 위치)
+    const startX = serverScore % 2 === 0 ? 65 : 35;
+    const startY = 153.4;
+
+    setStartPos({ x: startX, y: startY });
+    setTargetPos({ x: clickX, y: clickY });
+    setShuttlePos(null);
+    setServeResult(null);
+    setIsAnimating(true);
+    setAnimProgress(0);
+
+    const duration = 900; // 0.9초 궤적 비행
+    const startTime = performance.now();
+
+    const animate = (now: number) => {
+      const elapsed = now - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      
+      setAnimProgress(progress);
+
+      if (progress < 1) {
+        requestAnimationFrame(animate);
+      } else {
+        setIsAnimating(false);
+        setShuttlePos({ x: clickX, y: clickY });
+        const result = evaluateServe(clickX, clickY, serveMode, serverScore);
+        setServeResult(result);
+      }
+    };
+
+    requestAnimationFrame(animate);
   };
 
   const handleMouseMove = (e: React.MouseEvent<SVGSVGElement>) => {
+    if (isAnimating) return;
     const rect = e.currentTarget.getBoundingClientRect();
     const x = ((e.clientX - rect.left) / rect.width) * 100;
     const y = ((e.clientY - rect.top) / rect.height) * 220;
@@ -524,6 +546,32 @@ export default function App() {
     setShowQuizResults(false);
     setHasAnswered(false);
   };
+
+  // 궤적 실시간 비행 상태 계산
+  const getShuttleVisualPos = () => {
+    if (!isAnimating) return null;
+    
+    const tVal = animProgress;
+    const x = startPos.x + (targetPos.x - startPos.x) * tVal;
+    const yShadow = startPos.y + (targetPos.y - startPos.y) * tVal;
+    
+    // 포물선 궤적 높이 z 추가 (최대 42)
+    const z = 42 * 4 * tVal * (1 - tVal);
+    const yShuttle = yShadow - z;
+    
+    // 크기 (원근감 표현: 높이 뜰 때 커졌다가 내려갈 때 작아짐)
+    const scale = 1 + 0.6 * 4 * tVal * (1 - tVal);
+    
+    // 비행 방향에 따른 각도 계산
+    const dx = targetPos.x - startPos.x;
+    // 고도가 올라갔다 내려가는 기하학적 축을 y에 더하여 셔틀콕 각도 연출
+    const dyVisual = (targetPos.y - startPos.y) - 42 * 4 * (1 - 2 * tVal);
+    const deg = (Math.atan2(dyVisual, dx) * 180) / Math.PI;
+
+    return { x, yShadow, yShuttle, scale, deg, z };
+  };
+
+  const shuttleData = getShuttleVisualPos();
 
   return (
     <div className={`min-h-screen bg-[#070A13] text-slate-100 font-sans transition-all duration-300 ${isMobileFrame ? 'max-w-[430px] mx-auto border-x border-slate-900 shadow-2xl relative' : ''}`}>
@@ -595,7 +643,7 @@ export default function App() {
           </div>
         </div>
 
-        {/* 모바일 하단/중단 네비게이션 메뉴 바 */}
+        {/* 모바일 하단 네비게이션 */}
         <div className="lg:hidden flex items-center justify-around border-t border-slate-900 bg-[#070A13]/95 py-2">
           {(['court', 'serve', 'score', 'rules', 'quiz'] as const).map((tab) => {
             const Icon = {
@@ -733,7 +781,7 @@ export default function App() {
                   </div>
                 </div>
 
-                {/* 2. 서버 점수 조절 (홀/짝 결정) */}
+                {/* 2. 서버 점수 조절 */}
                 <div>
                   <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest block mb-1">{t.serve.scoreLabel}</label>
                   <div className="flex items-center justify-between bg-slate-950 border border-slate-900 rounded-lg p-2">
@@ -782,10 +830,15 @@ export default function App() {
                         </button>
                       </div>
                     </div>
+                  ) : isAnimating ? (
+                    <div className="p-4 rounded-lg bg-slate-900/40 border border-slate-900/60 text-[#00B4D8] text-xs flex items-center justify-center gap-2">
+                      <Sparkles className="w-4 h-4 animate-spin-slow" />
+                      <span>셔틀콕이 날아가는 중입니다...</span>
+                    </div>
                   ) : (
                     <div className="p-4 rounded-lg bg-slate-900/40 border border-slate-900/60 text-slate-500 text-xs flex items-center justify-center gap-2">
                       <Info className="w-4 h-4" />
-                      <span>코트를 클릭하여 셔틀콕을 떨어뜨려 보세요.</span>
+                      <span>코트 위쪽 영역을 클릭해 서브를 날려보세요.</span>
                     </div>
                   )}
                 </div>
@@ -806,22 +859,19 @@ export default function App() {
               <div className="lg:col-span-8 flex flex-col items-center">
                 <div className="relative w-full max-w-[340px] aspect-[1/2.2] bg-[#0c1424] rounded-xl p-3 border border-slate-800 shadow-[0_0_35px_rgba(0,180,216,0.06)] overflow-hidden">
                   
-                  {/* 대화형 가이드 십자선 (마우스 호버 시) */}
-                  {mousePos && mousePos.y < 110 && (
+                  {/* 대화형 가이드 십자선 (마우스 호버 시 & 애니메이션 중이 아닐 때) */}
+                  {mousePos && mousePos.y < 110 && !isAnimating && (
                     <div className="absolute inset-0 pointer-events-none z-20">
-                      {/* 가로 가이드 */}
                       <div 
                         className="absolute left-0 right-0 border-t border-[#00B4D8]/20 border-dashed"
                         style={{ top: `${(mousePos.y / 220) * 100}%` }}
                       ></div>
-                      {/* 세로 가이드 */}
                       <div 
                         className="absolute top-0 bottom-0 border-l border-[#00B4D8]/20 border-dashed"
                         style={{ left: `${mousePos.x}%` }}
                       ></div>
-                      {/* 미리보기 포인트 */}
                       <div 
-                        className="absolute w-2.5 h-2.5 bg-[#00F5FF] rounded-full -translate-x-1/2 -translate-y-1/2 shadow-[0_0_8px_#00F5FF] opacity-60"
+                        className="absolute w-2 h-2 bg-[#00F5FF]/70 rounded-full -translate-x-1/2 -translate-y-1/2 shadow-[0_0_8px_#00F5FF] opacity-60"
                         style={{ left: `${mousePos.x}%`, top: `${(mousePos.y / 220) * 100}%` }}
                       ></div>
                     </div>
@@ -840,7 +890,6 @@ export default function App() {
                     <rect x="19.5" y="43" width="61" height="134" fill="#0f1f33" stroke="none" />
                     
                     {/* 2. 서브 수신자 타겟 코트 영역 (대각선 타겟 반투명 네온 하이라이트) */}
-                    {/* 짝수 점수: 우측(서버 아래쪽 우측) -> 타겟은 위쪽 좌측 (X 19.5~50, Y 43/50.6 ~ 90.2) */}
                     {serverScore % 2 === 0 ? (
                       <rect 
                         x={serveMode === 'singles' ? "24.1" : "19.5"} 
@@ -848,96 +897,97 @@ export default function App() {
                         width={serveMode === 'singles' ? "25.9" : "30.5"} 
                         height={serveMode === 'singles' ? "47.2" : "39.6"} 
                         fill="rgba(0, 180, 216, 0.08)" 
-                        className="stroke-[#00B4D8]/30 stroke-[0.8] animate-pulse"
+                        className="stroke-[#00B4D8]/30 stroke-[0.8]"
                       />
                     ) : (
-                      // 홀수 점수: 좌측(서버 아래쪽 좌측) -> 타겟은 위쪽 우측 (X 50 ~ 80.5/75.9, Y 43/50.6 ~ 90.2)
                       <rect 
                         x="50" 
                         y={serveMode === 'singles' ? "43" : "50.6"} 
                         width={serveMode === 'singles' ? "25.9" : "30.5"} 
                         height={serveMode === 'singles' ? "47.2" : "39.6"} 
                         fill="rgba(0, 180, 216, 0.08)" 
-                        className="stroke-[#00B4D8]/30 stroke-[0.8] animate-pulse"
+                        className="stroke-[#00B4D8]/30 stroke-[0.8]"
                       />
                     )}
 
                     {/* 3. 코트 메인 라인 */}
-                    {/* 외곽 복식 경계선 */}
-                    <rect x="19.5" y="43" width="61" height="134" fill="none" stroke="currentColor" className="text-slate-800 transition-colors" />
-                    
-                    {/* 단식 사이드라인 (가로 안쪽) */}
+                    <rect x="19.5" y="43" width="61" height="134" fill="none" stroke="currentColor" className="text-slate-800" />
                     <line x1="24.1" y1="43" x2="24.1" y2="177" className={`${serveMode === 'singles' ? 'stroke-[#00B4D8]' : 'stroke-slate-800'} transition-colors`} />
                     <line x1="75.9" y1="43" x2="75.9" y2="177" className={`${serveMode === 'singles' ? 'stroke-[#00B4D8]' : 'stroke-slate-800'} transition-colors`} />
-                    
-                    {/* 복식 사이드라인 (가로 바깥선 하이라이트) */}
                     {serveMode === 'doubles' && (
                       <>
                         <line x1="19.5" y1="43" x2="19.5" y2="177" stroke="#00B4D8" />
                         <line x1="80.5" y1="43" x2="80.5" y2="177" stroke="#00B4D8" />
                       </>
                     )}
-
-                    {/* 네트 (중앙 분할 가로선) */}
                     <line x1="19.5" y1="110" x2="80.5" y2="110" stroke="#FF512F" strokeWidth="2" strokeDasharray="3 2" />
-
-                    {/* 숏 서비스 라인 */}
                     <line x1="19.5" y1="90.2" x2="80.5" y2="90.2" stroke="white" strokeWidth="1.2" />
                     <line x1="19.5" y1="129.8" x2="80.5" y2="129.8" stroke="white" strokeWidth="1.2" />
-
-                    {/* 복식 롱 서비스 라인 */}
                     <line x1="19.5" y1="50.6" x2="80.5" y2="50.6" className={`${serveMode === 'doubles' ? 'stroke-white' : 'stroke-slate-800'} transition-colors`} strokeWidth="1" />
                     <line x1="19.5" y1="169.4" x2="80.5" y2="169.4" className={`${serveMode === 'doubles' ? 'stroke-white' : 'stroke-slate-800'} transition-colors`} strokeWidth="1" />
-
-                    {/* 백 바운더리 라인 (맨 끝선) */}
                     <line x1="19.5" y1="43" x2="80.5" y2="43" stroke="white" strokeWidth="1.2" />
                     <line x1="19.5" y1="177" x2="80.5" y2="177" stroke="white" strokeWidth="1.2" />
-
-                    {/* 센터라인 (세로 중앙 분할선) */}
                     <line x1="50" y1="43" x2="50" y2="90.2" stroke="white" strokeWidth="0.8" />
                     <line x1="50" y1="129.8" x2="50" y2="177" stroke="white" strokeWidth="0.8" />
 
-                    {/* 4. 캐릭터 위치 표시 (서버 & 리시버 아이콘) */}
-                    {/* 서버 (아래쪽) */}
+                    {/* 4. 캐릭터 위치 표시 (서버 & 리시버) */}
                     {serverScore % 2 === 0 ? (
-                      // 우측 아래
-                      <circle cx="65" cy="153.4" r="3.5" fill="#00B4D8" className="animate-bounce" />
+                      <circle cx="65" cy="153.4" r="3.5" fill="#00B4D8" className={isAnimating ? "" : "animate-pulse"} />
                     ) : (
-                      // 좌측 아래
-                      <circle cx="35" cy="153.4" r="3.5" fill="#00B4D8" className="animate-bounce" />
+                      <circle cx="35" cy="153.4" r="3.5" fill="#00B4D8" className={isAnimating ? "" : "animate-pulse"} />
                     )}
 
-                    {/* 리시버 (위쪽 대각선 방향) */}
                     {serverScore % 2 === 0 ? (
-                      // 짝수 -> 타겟은 위쪽 좌측
                       <circle cx="35" cy="66.8" r="3" fill="#A3E635" className="opacity-80" />
                     ) : (
-                      // 홀수 -> 타겟은 위쪽 우측
                       <circle cx="65" cy="66.8" r="3" fill="#A3E635" className="opacity-80" />
                     )}
 
-                    {/* 5. 셔틀콕 낙하 시각 효과 (클릭된 위치) */}
-                    {shuttlePos && (
+                    {/* 5. 3D 포물선 비행 궤적 애니메이션 시뮬레이션 */}
+                    {isAnimating && shuttleData && (
                       <>
-                        {/* 낙하 애니메이션 그림자 */}
-                        <circle 
-                          cx={shuttlePos.x} 
-                          cy={shuttlePos.y} 
-                          r="5" 
+                        {/* 셔틀콕의 바닥 그림자 (Shadow) */}
+                        <ellipse 
+                          cx={shuttleData.x} 
+                          cy={shuttleData.yShadow} 
+                          rx={Math.max(1, 2.5 * (1 - shuttleData.z / 60))} 
+                          ry={Math.max(0.5, 1.2 * (1 - shuttleData.z / 60))} 
+                          fill="black" 
+                          opacity={0.35 * (1 - shuttleData.z / 50)} 
+                        />
+                        {/* 포물선 비행 궤적 잔상 라인 */}
+                        <path 
+                          d={`M ${startPos.x} ${startPos.y} Q ${(startPos.x + targetPos.x) / 2} ${((startPos.y + targetPos.y) / 2) - 35} ${targetPos.x} ${targetPos.y}`} 
                           fill="none" 
-                          stroke={serveResult === t.serve.in ? "#38ef7d" : "#FF512F"} 
-                          strokeWidth="1"
-                          className="animate-ping"
+                          stroke="rgba(0, 180, 216, 0.25)" 
+                          strokeWidth="1.2" 
+                          strokeDasharray="2 3" 
                         />
-                        {/* 낙하 중심점 */}
-                        <circle 
-                          cx={shuttlePos.x} 
-                          cy={shuttlePos.y} 
-                          r="2.5" 
-                          fill={serveResult === t.serve.in ? "#38ef7d" : "#FF512F"} 
-                          shadow-lg="true"
-                        />
+                        {/* 날아가고 있는 셔틀콕 모양 (SVG 방향 각도 회전) */}
+                        <g transform={`translate(${shuttleData.x}, ${shuttleData.yShuttle}) scale(${shuttleData.scale}) rotate(${shuttleData.deg + 90})`}>
+                          {/* 셔틀콕 깃털날개 */}
+                          <path d="M-3,-3 L-5,-11 L5,-11 L3,-3 Z" fill="rgba(241, 245, 249, 0.85)" stroke="white" strokeWidth="0.4" />
+                          <line x1="-1.5" y1="-3" x2="-2.2" y2="-11" stroke="rgba(255,255,255,0.4)" strokeWidth="0.4" />
+                          <line x1="0" y1="-3" x2="0" y2="-11" stroke="rgba(255,255,255,0.4)" strokeWidth="0.4" />
+                          <line x1="1.5" y1="-3" x2="2.2" y2="-11" stroke="rgba(255,255,255,0.4)" strokeWidth="0.4" />
+                          {/* 콕 헤드 */}
+                          <path d="M-3,-3 C-3,0.8 3,0.8 3,-3 Z" fill="#00B4D8" />
+                          <path d="M-3,-3 L3,-3" stroke="#FF512F" strokeWidth="0.6" />
+                        </g>
                       </>
+                    )}
+
+                    {/* 6. 착지 완료 후 꽂힌 셔틀콕 시각화 */}
+                    {shuttlePos && !isAnimating && (
+                      <g transform={`translate(${shuttlePos.x}, ${shuttlePos.y}) rotate(180)`}>
+                        {/* 콕이 바닥에 꽂힌 형태로 렌더링 (거꾸로 180도 회전) */}
+                        <path d="M-3,-3 L-5,-11 L5,-11 L3,-3 Z" fill="rgba(241, 245, 249, 0.9)" stroke="white" strokeWidth="0.4" />
+                        <line x1="-1.5" y1="-3" x2="-2.2" y2="-11" stroke="rgba(255,255,255,0.4)" strokeWidth="0.4" />
+                        <line x1="0" y1="-3" x2="0" y2="-11" stroke="rgba(255,255,255,0.4)" strokeWidth="0.4" />
+                        <line x1="1.5" y1="-3" x2="2.2" y2="-11" stroke="rgba(255,255,255,0.4)" strokeWidth="0.4" />
+                        <path d="M-3,-3 C-3,0.8 3,0.8 3,-3 Z" fill={serveResult === t.serve.in ? "#38ef7d" : "#FF512F"} />
+                        <path d="M-3,-3 L3,-3" stroke="white" strokeWidth="0.6" />
+                      </g>
                     )}
                   </svg>
 
@@ -946,19 +996,19 @@ export default function App() {
                     NET
                   </div>
 
-                  {/* 범례 표시 */}
+                  {/* 범례 */}
                   <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between text-[8px] text-slate-400 bg-slate-950/90 border border-slate-900 rounded-lg p-2 pointer-events-none">
                     <div className="flex items-center gap-1.5">
                       <div className="w-2.5 h-2.5 rounded-full bg-[#00B4D8]"></div>
-                      <span>SERVER (서버)</span>
+                      <span>SERVER</span>
                     </div>
                     <div className="flex items-center gap-1.5">
                       <div className="w-2.5 h-2.5 rounded-full bg-[#A3E635]"></div>
-                      <span>RECEIVER (리시버)</span>
+                      <span>RECEIVER</span>
                     </div>
                     <div className="flex items-center gap-1.5">
                       <div className="w-2.5 h-2.5 rounded-full bg-emerald-500/20 border border-emerald-500/40"></div>
-                      <span>TARGET (유효영역)</span>
+                      <span>TARGET</span>
                     </div>
                   </div>
                 </div>
@@ -981,7 +1031,7 @@ export default function App() {
 
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
               
-              {/* 왼쪽: 코트 가이드 SVG 인터랙션 */}
+              {/* 왼쪽 코트 */}
               <div className="lg:col-span-6 flex flex-col items-center">
                 <div className="relative w-full max-w-[280px] aspect-[1/2] bg-[#0c1424] rounded-xl p-3 border border-slate-800">
                   <svg 
@@ -990,7 +1040,6 @@ export default function App() {
                     strokeLinecap="round"
                     strokeLinejoin="round"
                   >
-                    {/* 1. 네트 */}
                     <line 
                       x1="5" y1="100" x2="95" y2="100" 
                       stroke={hoveredLine === 'net' ? "#FF512F" : "#ef4444"} 
@@ -999,8 +1048,6 @@ export default function App() {
                       onMouseEnter={() => setHoveredLine('net')}
                       onMouseLeave={() => setHoveredLine(null)}
                     />
-
-                    {/* 2. 복식 사이드라인 (맨 외곽) */}
                     <rect 
                       x="5" y="5" width="90" height="190" 
                       fill="none" 
@@ -1010,8 +1057,6 @@ export default function App() {
                       onMouseEnter={() => setHoveredLine('doublesSide')}
                       onMouseLeave={() => setHoveredLine(null)}
                     />
-
-                    {/* 3. 단식 사이드라인 (세로 안쪽선) */}
                     <line 
                       x1="12" y1="5" x2="12" y2="195" 
                       stroke={hoveredLine === 'singlesSide' ? "#00B4D8" : "currentColor"} 
@@ -1028,8 +1073,6 @@ export default function App() {
                       onMouseEnter={() => setHoveredLine('singlesSide')}
                       onMouseLeave={() => setHoveredLine(null)}
                     />
-
-                    {/* 4. 숏 서비스 라인 */}
                     <line 
                       x1="5" y1="70" x2="95" y2="70" 
                       stroke={hoveredLine === 'shortServe' ? "#fff" : "currentColor"} 
@@ -1046,8 +1089,6 @@ export default function App() {
                       onMouseEnter={() => setHoveredLine('shortServe')}
                       onMouseLeave={() => setHoveredLine(null)}
                     />
-
-                    {/* 5. 복식 롱 서비스 라인 */}
                     <line 
                       x1="5" y1="15" x2="95" y2="15" 
                       stroke={hoveredLine === 'doublesLong' ? "#fff" : "currentColor"} 
@@ -1064,8 +1105,6 @@ export default function App() {
                       onMouseEnter={() => setHoveredLine('doublesLong')}
                       onMouseLeave={() => setHoveredLine(null)}
                     />
-
-                    {/* 6. 센터라인 */}
                     <line 
                       x1="50" y1="5" x2="50" y2="70" 
                       stroke={hoveredLine === 'centerLine' ? "#fff" : "currentColor"} 
@@ -1082,8 +1121,6 @@ export default function App() {
                       onMouseEnter={() => setHoveredLine('centerLine')}
                       onMouseLeave={() => setHoveredLine(null)}
                     />
-
-                    {/* 7. 백 바운더리 라인 (가로 끝선) */}
                     <line 
                       x1="5" y1="5" x2="95" y2="5" 
                       stroke={hoveredLine === 'backBoundary' ? "#fff" : "currentColor"} 
@@ -1104,7 +1141,7 @@ export default function App() {
                 </div>
               </div>
 
-              {/* 오른쪽: 라인 설명 디테일 패널 */}
+              {/* 오른쪽설명 */}
               <div className="lg:col-span-6 flex flex-col gap-4">
                 {(['net', 'shortServe', 'doublesLong', 'backBoundary', 'centerLine', 'singlesSide', 'doublesSide'] as const).map((lineKey) => (
                   <div 
@@ -1238,7 +1275,7 @@ export default function App() {
                   </p>
                 </div>
 
-                {/* 미니 코트 맵 시각화 */}
+                {/* 미니 코트 맵 */}
                 <div className="flex justify-center mb-6 bg-[#070A13] p-3 rounded-lg border border-slate-900/80">
                   <div className="w-[120px] aspect-[1/2.2]">
                     <svg viewBox="0 0 100 220" className="w-full h-full text-slate-700 stroke-[1.8]" strokeLinecap="round" strokeLinejoin="round">
@@ -1251,7 +1288,6 @@ export default function App() {
                         <rect x="50" y={QUIZ_QUESTIONS[currentQuizIndex].type === 'singles' ? "43" : "50.6"} width={QUIZ_QUESTIONS[currentQuizIndex].type === 'singles' ? "25.9" : "30.5"} height={QUIZ_QUESTIONS[currentQuizIndex].type === 'singles' ? "47.2" : "39.6"} fill="rgba(225, 0, 255, 0.05)" className="stroke-[#E100FF]/30 stroke-[0.8]" />
                       )}
 
-                      {/* 코트 경계 */}
                       <rect x="19.5" y="43" width="61" height="134" fill="none" stroke="currentColor" className="text-slate-800" />
                       <line x1="24.1" y1="43" x2="24.1" y2="177" className={QUIZ_QUESTIONS[currentQuizIndex].type === 'singles' ? 'stroke-slate-500' : 'stroke-slate-900'} />
                       <line x1="75.9" y1="43" x2="75.9" y2="177" className={QUIZ_QUESTIONS[currentQuizIndex].type === 'singles' ? 'stroke-slate-500' : 'stroke-slate-900'} />
@@ -1265,15 +1301,18 @@ export default function App() {
                       <line x1="50" y1="43" x2="50" y2="90.2" stroke="currentColor" strokeWidth="0.6" />
                       <line x1="50" y1="129.8" x2="50" y2="177" stroke="currentColor" strokeWidth="0.6" />
 
-                      {/* 서버 점수에 따른 서버 위치 */}
+                      {/* 서버 위치 */}
                       {QUIZ_QUESTIONS[currentQuizIndex].score % 2 === 0 ? (
                         <circle cx="65" cy="153.4" r="3.5" fill="#00B4D8" />
                       ) : (
                         <circle cx="35" cy="153.4" r="3.5" fill="#00B4D8" />
                       )}
 
-                      {/* 셔틀콕 낙하지점 */}
-                      <circle cx={QUIZ_QUESTIONS[currentQuizIndex].x} cy={QUIZ_QUESTIONS[currentQuizIndex].y} r="4" fill="#E100FF" className="animate-pulse shadow-2xl" />
+                      {/* 꽂힌 셔틀콕 렌더링 */}
+                      <g transform={`translate(${QUIZ_QUESTIONS[currentQuizIndex].x}, ${QUIZ_QUESTIONS[currentQuizIndex].y}) rotate(180)`}>
+                        <path d="M-3,-3 L-5,-11 L5,-11 L3,-3 Z" fill="rgba(241, 245, 249, 0.9)" stroke="white" strokeWidth="0.4" />
+                        <circle cx="0" cy="-3" r="2.2" fill="#E100FF" />
+                      </g>
                     </svg>
                   </div>
                 </div>
